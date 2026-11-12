@@ -1459,6 +1459,9 @@ window.onload = loadData;
 </script>
 </body></html>
 """
+@web.get("/health")
+def health():
+    return "ok", 200
 
 @web.get("/")
 def home():
