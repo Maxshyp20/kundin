@@ -279,7 +279,7 @@ async def privacy_policy(message: Message):
 
 @dp.message(F.text == "👤 Обратиться к администратору")
 async def contact_admin(message: Message):
-    markup = InlineKeyboardMarkup(inline_keyboard=[[InlineKeyboardButton(text="Написать администратору", url="https://t.me/HellperIOS")]])
+    markup = InlineKeyboardMarkup(inline_keyboard=[[InlineKeyboardButton(text="Написать администратору", url="https://t.me/Hellper011")]])
     await message.answer("Связь с администратором:", reply_markup=markup)
 
 web = Flask(__name__)
