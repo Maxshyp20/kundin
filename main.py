@@ -1536,10 +1536,12 @@ def api_upload_request():
     game = request.form.get("game", "Unknown")
     if not file: return abort(400)
     
-    allowed_extensions = {'.jpg', '.jpeg', '.png', '.webp', '.heic'}
+    # Разрешенные расширения (включая iPhone-форматы)
+    allowed_extensions = {'.jpg', '.jpeg', '.png', '.webp', '.heic', '.heif'}
     file_ext = os.path.splitext(file.filename)[1].lower()
     
-    if file_ext not in allowed_extensions or not file.content_type.startswith('image/'):
+    # Убираем проверку content_type, проверяем только расширение
+    if file_ext not in allowed_extensions:
         return jsonify(error="Разрешено загружать только изображения (скриншоты)."), 400
     
     filename = f"req_{int(time.time())}_{user['id']}{file_ext}"
