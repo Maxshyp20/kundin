@@ -1053,11 +1053,6 @@ async function submitRequest() {
   const file = $("screenshot").files[0];
   if (!file) return alert("Пожалуйста, прикрепите скриншот!");
   
-  if (!file.type.startsWith('image/')) {
-      alert("Пожалуйста, загрузите изображение (скриншот)!");
-      return;
-  }
-  
   $("submitBtn").disabled = true;
   $("submitBtn").innerText = "Отправка...";
   
@@ -1065,13 +1060,26 @@ async function submitRequest() {
   fd.append("photo", file);
   fd.append("game", currentGame);
   
-  const r = await fetch("/api/request", { method: "POST", headers: hdrs(), body: fd });
-  if (r.ok) {
-     $("submitBtn").innerText = "Отправить скриншот";
-     $("submitBtn").disabled = false;
-     startPendingTimer();
-  } else {
-     alert("Ошибка при загрузке. Убедитесь, что отправляете картинку.");
+  try {
+    // Важно: передаем только токен авторизации, без application/json
+    const r = await fetch("/api/request", { 
+      method: "POST", 
+      headers: { "X-User-Token": getToken() }, 
+      body: fd 
+    });
+    
+    if (r.ok) {
+       $("submitBtn").innerText = "Отправить скриншот";
+       $("submitBtn").disabled = false;
+       startPendingTimer();
+    } else {
+       const errData = await r.json().catch(() => ({}));
+       alert(errData.error || "Ошибка при загрузке. Убедитесь, что отправляете картинку.");
+       $("submitBtn").disabled = false;
+       $("submitBtn").innerText = "Отправить скриншот";
+    }
+  } catch (e) {
+     alert("Ошибка сети при отправке.");
      $("submitBtn").disabled = false;
      $("submitBtn").innerText = "Отправить скриншот";
   }
