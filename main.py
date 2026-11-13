@@ -25,7 +25,7 @@ from aiogram.types import (
     ReplyKeyboardMarkup, KeyboardButton, FSInputFile, WebAppInfo, BufferedInputFile
 )
 import sqlite3
-
+# qw
 load_dotenv()
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger("ios-helper")
